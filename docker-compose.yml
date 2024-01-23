@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  gve_devnet_ise_expired_guests:
+    image: ghcr.io/gve-sw/gve_devnet_ise_expired_guests:latest
+    container_name: gve_devnet_ise_expired_guests
+    environment:
+      - ISE_IP=${ISE_IP}
+      - USERNAME=${USERNAME}
+      - PASSWORD=${PASSWORD}
+      - SCHEDULER_DAILY_MIN=${SCHEDULER_DAILY_MIN}
+    volumes:
+      - /app
+    restart: "always"
