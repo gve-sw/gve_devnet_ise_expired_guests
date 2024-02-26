@@ -58,6 +58,10 @@ PASSWORD=<Sponsor Account PASSWORD>
 
 SCHEDULER_DAILY_MIN=<NUMER of MIN to RUN the SCRIPT>
 
+EMAIL_SENDER=
+EMAIL_APP_PASSWORD=
+RECEIVER_EMAIL=
+
 ```
 
 3. Set up a Python virtual environment. Make sure Python 3 is installed in your environment, and if not, you may download Python [here](https://www.python.org/downloads/). Once Python 3 is installed in your environment, you can activate the virtual environment with the instructions found [here](https://docs.python.org/3/tutorial/venv.html).
