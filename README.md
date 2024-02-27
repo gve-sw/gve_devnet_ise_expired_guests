@@ -1,5 +1,5 @@
 # GVE DevNet ISE Expired Guest Users
-This prototypes leverages the ISE APIs to retrieve and delete the expired guests users. A python script is scheduled to run every N minutes to automate the process. 
+This prototypes leverages the ISE APIs to retrieve and delete the expired guests users. A python script is scheduled to run every N minutes to automate the process. The names and IDs of the deleted guest-users are logged in `.txt` files within the `logs` folder. A file is created daily.
 ## Contacts
 * Roaa AlKhalaf
 
@@ -7,14 +7,6 @@ This prototypes leverages the ISE APIs to retrieve and delete the expired guests
 * ISE 
 * ISE APIs
 * Python
-
-
-## Docker Image / GitHub Actions Deployment
-
-To make the code more **portable** and **easier** for users to deploy, you can automatically create a GitHub Package (Docker Image) or GitHub Release (GoLang Application Binaries) by configuring the relevant files in `.github/workflows` and the repo. Users then have the option to pull and run the docker image (or binaries) with your application and environment configured to skip over setup steps (ex: installing python). 
-
-Refer to the documentation [here](https://wwwin-github.cisco.com/gve/docker-and-github-actions-templates) for how to set up this functionality.
-
 
 ## Prerequisites
 
@@ -58,9 +50,9 @@ PASSWORD=<Sponsor Account PASSWORD>
 
 SCHEDULER_DAILY_MIN=<NUMER of MIN to RUN the SCRIPT>
 
-EMAIL_SENDER=
-EMAIL_APP_PASSWORD=
-RECEIVER_EMAIL=
+EMAIL_SENDER=<Email address to send the email from>
+EMAIL_APP_PASSWORD=<Password for above email account. In case of Gmail a specific App Password is required (see https://support.google.com/accounts/answer/185833?hl=en)>
+RECEIVER_EMAIL=<Email address to receive the log files>
 
 ```
 
@@ -68,9 +60,17 @@ RECEIVER_EMAIL=
 4. Install the requirements with `pip3 install -r requirements.txt`
 
 ## Usage
-To run the code, use the command:
+1. To run the original script with no bulk requests, use the command:
 ```
 $ python3 main.py
+```
+2. To run the new version of the script (that includes API bulk request), use the command:
+```
+$ python3 bulkrequest.py
+```
+3. To test the mailing service, use the command:
+```
+$ python3 testMail.py
 ```
 #
 # Screenshots
