@@ -32,23 +32,32 @@ HEADERS = {
     "Content-Type": "application/json",
     "Accept": "application/json"
 }
+users_list=[]
 
 # Get all expired guest users
-def get_all_guests():
-    guests_endpoint="/guestuser/?filter=status.CONTAINS.EXPIRED"
+def get_all_guests(guests_endpoint):
     try:
-        response=requests.get(BASE_URL+guests_endpoint,
+        response=requests.get(guests_endpoint,
                 headers=HEADERS, auth=(USERNAME, PASSWORD),
                 verify=False).json()
-        users_list=[]
-
+        
+        
         if response["SearchResult"]["total"] != 0:
             for guest in response["SearchResult"]["resources"]:
-                user_entry={}
-                user_entry["name"]=guest["name"]
-                user_entry["id"]=guest["id"]
-                users_list.append(user_entry)
+                if len(users_list) < 5000:
+                    user_entry={}
+                    user_entry["name"]=guest["name"]
+                    user_entry["id"]=guest["id"]
+                    users_list.append(user_entry)
+
+            if len(response["SearchResult"]["resources"]) < 100:
+                print()
+            elif response["SearchResult"]["nextPage"]:
+                guests_endpoint=response["SearchResult"]["nextPage"]["href"]
+                get_all_guests(guests_endpoint)
+          
             delete_in_bulk(users_list)
+            
         else:
             print("No Expired Guest Users")
     except Exception as e:
@@ -109,9 +118,9 @@ def check_bulk_request_status(bulkID,users_list):
                     
         if response["BulkStatus"]["executionStatus"]=="COMPLETED":
             for resource in response["BulkStatus"]["resourcesStatus"]:
-                    print("inside the for loop")
+                    
                     if resource["status"] and resource["resourceExecutionStatus"]=="SUCCESS":
-                        print("inside the if statemnet ")
+                        
                         for user in users_list:
                             if resource['id']==user['id']:
                                 status=f"Guest User {user['name']} with ID {resource['id']} deleted successfully\n"
@@ -127,9 +136,10 @@ def check_bulk_request_status(bulkID,users_list):
             check_bulk_request_status(bulkID, users_list)
         logs_file.close()
     except Exception as e:
-        print("Unable to check bulk status")
-        print("This is the exception: " + str(e))
+        # print("Unable to check bulk status")
+        # print("This is the exception: " + str(e))
+        print()
 
 
 if __name__ == "__main__":
-    get_all_guests()
+    get_all_guests(BASE_URL+"/guestuser?size=100&filter=status.CONTAINS.EXPIRED")
