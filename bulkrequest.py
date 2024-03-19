@@ -50,9 +50,7 @@ def get_all_guests(guests_endpoint):
                     user_entry["id"]=guest["id"]
                     users_list.append(user_entry)
 
-            if len(response["SearchResult"]["resources"]) < 100:
-                print()
-            elif response["SearchResult"]["nextPage"]:
+            if "nextPage" in response["SearchResult"]:
                 guests_endpoint=response["SearchResult"]["nextPage"]["href"]
                 get_all_guests(guests_endpoint)
           
